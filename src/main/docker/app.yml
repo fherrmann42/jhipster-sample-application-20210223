@@ -1,0 +1,24 @@
+version: '2'
+services:
+  jhipstersampleapplication20210223-app:
+    image: jhipstersampleapplication20210223
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://jhipstersampleapplication20210223-postgresql:5432/jhipsterSampleApplication20210223
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
+    ports:
+      - 8080:8080
+  jhipstersampleapplication20210223-postgresql:
+    extends:
+      file: postgresql.yml
+      service: jhipstersampleapplication20210223-postgresql
+  keycloak:
+    extends:
+      file: keycloak.yml
+      service: keycloak
